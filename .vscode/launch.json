@@ -1,0 +1,38 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "name": "Run NER Script",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/run_ner.py",
+            "args": [
+                "--data_dir", "${workspaceFolder}/../datasets/NER/${DATASET}/",
+                "--labels", "${workspaceFolder}/../datasets/NER/${DATASET}/labels.txt",
+                "--model_name_or_path", "../biobertModelWarehouse/biobert-base-cased-v1.2",
+                "--output_dir", "${workspaceFolder}/output/${DATASET}",
+                "--max_seq_length", "192",
+                "--num_train_epochs", "30",
+                "--per_device_train_batch_size", "32",
+                "--save_steps", "1000",
+                "--seed", "1",
+                "--do_train",
+                "--do_eval",
+                "--do_predict",
+                "--overwrite_output_dir"
+            ],
+            "env": {
+                "SAVE_DIR": "${workspaceFolder}/output",
+                "DATA_DIR": "${workspaceFolder}/../datasets/NER",
+                "MAX_LENGTH": "192",
+                "BATCH_SIZE": "32",
+                "NUM_EPOCHS": "30",
+                "SAVE_STEPS": "1000",
+                "DATASET": "MetabolismNER",
+                "SEED": "1"
+            },
+            "console": "integratedTerminal"
+        }
+    ]
+}

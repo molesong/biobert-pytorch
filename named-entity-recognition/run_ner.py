@@ -29,11 +29,13 @@ import numpy as np
 from seqeval.metrics import f1_score, precision_score, recall_score
 from torch import nn
 
+# from transformers import AutoTokenizer,AutoModelForCausalLM
 from transformers import (
     AutoConfig,
     AutoModelForTokenClassification,
     AutoModel,
     AutoTokenizer,
+    AutoModelForCausalLM,
     EvalPrediction,
     HfArgumentParser,
     Trainer,
@@ -44,7 +46,8 @@ from utils_ner import NerDataset, Split, get_labels
 
 logger = logging.getLogger(__name__)
 
-
+#在下面的代码中，@dataclass 装饰器省略了手动编写的 __init__ 方法，以及通过 self.x 和 self.y 定义的属性。这使得代码更加简洁和易读。
+#同时，使用 @dataclass 装饰器后，就可以方便地在外部创建数据类的实例并传递参数
 @dataclass
 class ModelArguments:
     """
@@ -175,7 +178,7 @@ def main():
     tokenizer.save_pretrained(training_args.output_dir)
     import pdb; pdb.set_trace()
     '''
-
+    print(1)
     # Get datasets
     train_dataset = (
         NerDataset(
