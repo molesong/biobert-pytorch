@@ -1,0 +1,41 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run RE Model",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/run_re.py",            
+            "justMyCode": "false",
+            "args": [
+                "--task_name", "SST-2",
+                // "--config_name", "bert-base-cased",
+                "--data_dir", "~/bioinfo/P_subject/NLP/biobert/biobert-pytorch/datasets/RE/GAD/1",
+                "--model_name_or_path", "~/bioinfo/P_subject/NLP/biobert/biobertModelWarehouse/biobert-base-cased-v1.2",
+                "--max_seq_length", "256",
+                "--num_train_epochs", "30",
+                "--per_device_train_batch_size", "32",
+                "--save_steps", "1000",
+                "--seed", "1",
+                "--do_train",
+                "--do_predict",
+                "--learning_rate", "5e-5",
+                "--output_dir", "./output/GAD-1_test",
+                "--overwrite_output_dir"
+            ],
+            "env": {
+                "SAVE_DIR": "./output",
+                "DATA": "GAD",
+                "SPLIT": "1",
+                "DATA_DIR": "~/bioinfo/P_subject/NLP/biobert/biobert-pytorch/datasets/RE/${DATA}/${SPLIT}",
+                // "ENTITY": "${DATA}-${SPLIT}",
+                "MAX_LENGTH": "256",
+                "BATCH_SIZE": "32",
+                "NUM_EPOCHS": "3",
+                "SAVE_STEPS": "1000",
+                "SEED": "1"
+            },
+            "console": "integratedTerminal"
+        }
+    ]
+}

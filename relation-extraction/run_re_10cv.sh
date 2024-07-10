@@ -1,5 +1,5 @@
 export SAVE_DIR=./output
-export DATA="euadr"
+export DATA="GAD"
 
 export MAX_LENGTH=128
 export BATCH_SIZE=32
@@ -8,7 +8,7 @@ export SAVE_STEPS=1000
 export SEED=1
 
 
-for SPLIT in {1..10}
+for SPLIT in {1..1}
 do
   DATA_DIR=../datasets/RE/${DATA}/${SPLIT}
   ENTITY=${DATA}-${SPLIT}
@@ -18,7 +18,7 @@ do
     --task_name SST-2 \
     --config_name bert-base-cased \
     --data_dir ${DATA_DIR} \
-    --model_name_or_path dmis-lab/biobert-base-cased-v1.1 \
+    --model_name_or_path ~/bioinfo/P_subject/NLP/biobert/biobertModelWarehouse/biobert-base-cased-v1.2 \
     --max_seq_length ${MAX_LENGTH} \
     --num_train_epochs ${NUM_EPOCHS} \
     --per_device_train_batch_size ${BATCH_SIZE} \

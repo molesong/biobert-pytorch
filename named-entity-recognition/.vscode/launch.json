@@ -1,6 +1,7 @@
 {
     "version": "0.2.0",
     "configurations": [
+        
 
         
         {
@@ -10,30 +11,21 @@
             "program": "${workspaceFolder}/run_ner.py",
             "justMyCode": false,
             "args": [
-                "--data_dir", "~/bioinfo/P_subject/NLP/biobert/biobert-pytorch/datasets/NER/NCBI-disease_change_B_with_B_disease",
-                "--labels", "~/bioinfo/P_subject/NLP/biobert/biobert-pytorch/datasets/NER/NCBI-disease_change_B_with_B_disease/labels.txt",
-                "--model_name_or_path", "~/bioinfo/P_subject/NLP/biobert/biobertModelWarehouse/biobert-base-cased-v1.2",
-                "--output_dir", "${workspaceFolder}/output/NCBI-disease_new",
+                "--data_dir", "~/bioinfo/P_subject/NLP/biobert/biobert-pytorch/datasets/NER/combine_lipid_disease",
+                "--labels", "~/bioinfo/P_subject/NLP/biobert/biobert-pytorch/datasets/NER/combine_lipid_disease/labels.txt",
+                "--model_name_or_path", "${workspaceFolder}/output/4_combine_lipid_disease_ture_combine",
+                "--output_dir", "${workspaceFolder}/output/4_combine_lipid_disease_ture_combine_1",
                 "--max_seq_length", "384",
-                "--num_train_epochs", "3",
+                "--num_train_epochs", "1",
                 "--per_device_train_batch_size", "32",
                 "--save_steps", "1000",
+                // "--no_cuda", 
                 "--seed", "1",
                 "--do_train",
                 "--do_eval",
                 "--do_predict",
                 "--overwrite_output_dir"
             ],
-            "env": {
-                "SAVE_DIR": "${workspaceFolder}/output",
-                "DATA_DIR": "${workspaceFolder}/../datasets/NER",
-                "MAX_LENGTH": "384",
-                "BATCH_SIZE": "32",
-                "NUM_EPOCHS": "30",
-                "SAVE_STEPS": "1000",
-                // "PATH": "~/bioinfo/P_subject/NLP/MetaboliteNER/Corpus/LipidCorpus",
-                "SEED": "1"
-            },
             "console": "integratedTerminal"
         }
     ]

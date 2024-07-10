@@ -95,7 +95,7 @@ if is_torch_available():
         ):
             # Load data features from cache or dataset file
             cached_features_file = os.path.join(
-                data_dir, "cached_{}_{}_{}".format(mode.value, tokenizer.__class__.__name__, str(max_seq_length)),
+                data_dir, "cached_{}_{}_max_seq_length_{}".format(mode.value, tokenizer.__class__.__name__, str(max_seq_length)),
             )
 
             # Make sure only the first process in distributed training processes the dataset,
@@ -255,7 +255,8 @@ def read_examples_from_file(data_dir, mode: Union[Split, str]) -> List[InputExam
                     if splits_replace == 'O':
                         labels.append(splits_replace)
                     else:
-                        labels.append(splits_replace + "-bio")
+                        labels.append(splits_replace)
+                        # labels.append(splits_replace + "-bio")  #changed by mls.
                 else:
                     # Examples could have no label for mode = "test"
                     labels.append("O")
@@ -392,10 +393,10 @@ def convert_examples_to_features(
 
 
 def get_labels(path: str) -> List[str]:
-    if path:
+    if path:   #In general, the path parameter is not None.
         with open(path, "r") as f:
             labels = f.read().splitlines()
-            labels = [i+'-bio' if i != 'O' else 'O' for i in labels]
+            labels = [i if i != 'O' else 'O' for i in labels]
         if "O" not in labels:
             labels = ["O"] + labels
         return labels
