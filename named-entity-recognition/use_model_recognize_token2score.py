@@ -16,45 +16,28 @@ def load_model_and_tokenizer(model_dir,device):
 
     return config, tokenizer, model
 
-def predict(text, tokenizer, model, label_map, device):
+def predict(text, tokenizer, model, label_map, device = 'cuda'):
     # 将输入文本分词
     text_split = text.split()
-    inputs = tokenizer(text_split, return_tensors="pt", truncation=True, is_split_into_words=True, max_length=512, add_special_tokens=False)
+    inputs = tokenizer(text_split, return_tensors="pt", truncation=True, is_split_into_words=True, max_length=512)
     input_ids = inputs["input_ids"].to(device)
     attention_mask = inputs["attention_mask"].to(device)
 
     # 使用模型进行预测
     with torch.no_grad():
         outputs = model(input_ids, attention_mask=attention_mask)
+    # 获取预测结果matrix
         
-        # 兼容不同版本的transformers库
-        if isinstance(outputs, tuple):
-            logits = outputs[0]
-        else:
-            logits = outputs.logits
-
-    # 获取预测结果
-    predictions = torch.argmax(logits, dim=2)
-    
-    predictions = predictions.cpu().detach().numpy()  #gpu中的torch.tensor,需要先把它放进cpu才可以转化
-    
-
-    # 将预测结果转换为标签
-    # example = "This is a tokenization example"
-    txt_label_index_list = []
-    #BatchEncoding.word_ids returns a list mapping words to tokens
-    for w_idx in set(inputs.word_ids()):
-        start, _ = inputs.word_to_tokens(w_idx)  #BatchEncoding.word_to_tokens tells us which and how many tokens are used for the specific word
-        txt_label_index_list.append(start)         # we add +1 because you wanted to start with 1 and not with 0
-    txt_predictions  = [predictions[0][index] for index in txt_label_index_list]
-    return text_split,txt_predictions
+    tokens = tokenizer.convert_ids_to_tokens(input_ids[0].tolist())
+    predictions = outputs[0][0]
+    return tokens, predictions
 
 
 path_ = '/home/data/t200404/bioinfo/P_subject/NLP/biobert/datasets/for_recognize/download_paper_and_use_Auto-CORPus_deal_paper/deal/extract_result/'
 with open(path_ + 'df_dict.pkl','rb') as f:
     df_dict = pickle.load(f)
 
-model_name = '4_combine_lipid_disease_ture_combine_3.2_data_from_MetaboliteNER_replace'
+model_name = '4_combine_lipid_disease_ture_combine_3.1_data_from_MetaboliteNER_replace'
 model_dir = "/home/data/t200404/bioinfo/P_subject/NLP/biobert/biobertModelWarehouse/model_from_trained/NER/"  # 替换为你模型的保存路径
 model_dir = model_dir + model_name + "/"
 config, tokenizer, model = load_model_and_tokenizer(model_dir,device = 'cuda')
@@ -69,15 +52,15 @@ save_batch = 10
 index_ = 0
 for PMC_bioc_name in dict_keys_list:    
 
-    if 'predictions_lipid' in df_dict[PMC_bioc_name].columns:
+    if 'score' in df_dict[PMC_bioc_name].columns:
         continue
     else:
         print(PMC_bioc_name)
         results = df_dict[PMC_bioc_name]['sentence'].apply(
             lambda x: predict(x, tokenizer, model, label_map, device='cuda')
         )
-        df_dict[PMC_bioc_name]['text_split'], df_dict[PMC_bioc_name]['txt_predictions'] = zip(*results)
+        df_dict[PMC_bioc_name]['tokens'], df_dict[PMC_bioc_name]['score'] = zip(*results)
         index_ += 1
         if index_ % save_batch == 0:
-            with open(path_+ f'df_dict_lipid_and_disease_{model_name}'+'_word2label'+'.pkl','wb') as f:
+            with open(path_+ f'lipid_and_disease_{model_name}'+'_token2score'+'.pkl','wb') as f:
                 pickle.dump(df_dict, f)

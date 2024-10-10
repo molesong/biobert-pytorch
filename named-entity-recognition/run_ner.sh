@@ -7,10 +7,10 @@ root_dir = '/home/data/t200404/bioinfo/P_subject/NLP/biobert'
 root_dir="/home/data/t200404/bioinfo/P_subject/NLP/biobert"
 
 # 定义其他部分路径
-dataset_path="/datasets/for_train/datasets_from_download/NER/lipid/combine_LipidCorpus/output"
+dataset_path="/datasets/for_train/pre_deal_data/2.NER/lipid/result/MetaboliteNER_lipid_replace__add_space"
 labels_path="/datasets/for_train/datasets_from_download/NER/lipid/1_LipidCorpus/labels.txt"
-model_path="/biobertModelWarehouse/model_from_trained/NER/4_combine_lipid_disease_ture_combine_2"
-output_path="/biobertModelWarehouse/model_from_trained/NER/4_combine_lipid_disease_ture_combine_3"
+model_path="/biobertModelWarehouse/model_from_trained/NER/4_combine_lipid_disease_ture_combine_3.1_data_from_MetaboliteNER_replace"
+output_path="/biobertModelWarehouse/model_from_trained/NER/4_combine_lipid_disease_ture_combine_3.2_data_from_MetaboliteNER_replace"
 
 # 构建完整路径
 full_dataset_path="$root_dir$dataset_path"

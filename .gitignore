@@ -3,3 +3,5 @@
 */__pycache__/*
 */en_ner*
 cached_*
+nohup.out
+output.log

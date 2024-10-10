@@ -1,0 +1,31 @@
+nohup: ignoring input
+/home/data/t200404/software/anaconda3/envs/python3_11_gpu/lib/python3.11/site-packages/transformers/utils/generic.py:260: UserWarning: torch.utils._pytree._register_pytree_node is deprecated. Please use torch.utils._pytree.register_pytree_node instead.
+  torch.utils._pytree._register_pytree_node(
+/home/data/t200404/software/anaconda3/envs/python3_11_gpu/lib/python3.11/site-packages/transformers/utils/generic.py:260: UserWarning: torch.utils._pytree._register_pytree_node is deprecated. Please use torch.utils._pytree.register_pytree_node instead.
+  torch.utils._pytree._register_pytree_node(
+PMC10916870_bioc.json
+Traceback (most recent call last):
+  File "/home/data/t200404/bioinfo/P_subject/NLP/biobert/pytorch-biobert/named-entity-recognition/use_model_recognize_token2score.py", line 62, in <module>
+    df_dict[PMC_bioc_name]['tokens'], df_dict[PMC_bioc_name]['score'] = zip(*results)
+                                      ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/data/t200404/software/anaconda3/envs/python3_11_gpu/lib/python3.11/site-packages/pandas/core/frame.py", line 3950, in __setitem__
+    self._set_item(key, value)
+  File "/home/data/t200404/software/anaconda3/envs/python3_11_gpu/lib/python3.11/site-packages/pandas/core/frame.py", line 4143, in _set_item
+    value = self._sanitize_column(value)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/data/t200404/software/anaconda3/envs/python3_11_gpu/lib/python3.11/site-packages/pandas/core/frame.py", line 4871, in _sanitize_column
+    return sanitize_array(value, self.index, copy=True, allow_2d=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/data/t200404/software/anaconda3/envs/python3_11_gpu/lib/python3.11/site-packages/pandas/core/construction.py", line 602, in sanitize_array
+    subarr = maybe_convert_platform(data)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/data/t200404/software/anaconda3/envs/python3_11_gpu/lib/python3.11/site-packages/pandas/core/dtypes/cast.py", line 130, in maybe_convert_platform
+    arr = construct_1d_object_array_from_listlike(values)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/data/t200404/software/anaconda3/envs/python3_11_gpu/lib/python3.11/site-packages/pandas/core/dtypes/cast.py", line 1594, in construct_1d_object_array_from_listlike
+    result[:] = values
+    ~~~~~~^^^
+  File "/home/data/t200404/software/anaconda3/envs/python3_11_gpu/lib/python3.11/site-packages/torch/_tensor.py", line 1089, in __array__
+    return self.numpy().astype(dtype, copy=False)
+           ^^^^^^^^^^^^
+TypeError: can't convert cuda:0 device type tensor to numpy. Use Tensor.cpu() to copy the tensor to host memory first.

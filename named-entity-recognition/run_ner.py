@@ -252,14 +252,14 @@ def main():
         # if trainer.is_world_master():
         tokenizer.save_pretrained(training_args.output_dir)
 
-    # Evaluation
+    # Evaluation   评估模型性能
     results = {}
     if training_args.do_eval:
         logger.info("*** Evaluate ***")
 
         result = trainer.evaluate()
         
-        output_eval_file = os.path.join(training_args.output_dir, "eval_results.txt")
+        output_eval_file = os.path.join(training_args.output_dir, "eval_results.txt")  # 保存评估结果的文件名
         # if trainer.is_world_master():
         with open(output_eval_file, "w") as writer:
             logger.info("***** Eval results *****")
