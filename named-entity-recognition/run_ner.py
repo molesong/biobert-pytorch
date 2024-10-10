@@ -283,7 +283,7 @@ def main():
         )
 
         predictions, label_ids, metrics = trainer.predict(test_dataset)
-        preds_list, _ = align_predictions(predictions, label_ids)
+        preds_list, _ = align_predictions(predictions, label_ids)  #preds_list 是预测结果，对应的是每句话的实体列表，不是tokens
         
         # Save predictions
         output_test_results_file = os.path.join(training_args.output_dir, "test_results.txt")
