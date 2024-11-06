@@ -26,7 +26,7 @@ from typing import List, Optional, Union
 from filelock import FileLock
 
 from transformers import PreTrainedTokenizer, is_tf_available, is_torch_available
-
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -47,6 +47,21 @@ class InputExample:
     words: List[str]
     labels: Optional[List[str]]
 
+
+# @dataclass
+# class InputExample_fortest:
+#     """
+#     A single training/test example for token classification.
+
+#     Args:
+#         guid: Unique id for the example.
+#         words: list. The words of the sequence.
+#         labels: (Optional) list. The labels for each word of the sequence. This should be
+#         specified for train and dev examples, but not for test examples.
+#     """
+
+#     guid: str
+#     words: List[str]
 
 @dataclass
 class InputFeatures:
@@ -230,10 +245,52 @@ if is_tf_available():
         def __getitem__(self, i) -> InputFeatures:
             return self.features[i]
 
+# def read_examples_from_file____new(data_dir,data_file_name, mode: Union[Split, str]) -> List[InputExample]:
+#     if isinstance(mode, Split):
+#         mode = mode.value
+#     # InputExampleClass = InputExample if mode == "test" else InputExample
+#     file_path = os.path.join(data_dir, f"{data_file_name}")
+#     guid_index = 1
+#     examples = []
+#     with open(file_path, encoding="utf-8") as f:
+#         words = []
+#         labels = []
+#         for line in f:
+#             if line.startswith("-DOCSTART-") or line == "" or line == "\n":
+#                 if words:   #如果是空行，则说明一个句子结束了。
+#                     # if mode == "test":
+#                     examples.append(InputExample(guid=f"{mode}-{guid_index}", words=words, labels=labels))
+#                     # else:
+#                     #     examples.append(InputExample(guid=f"{mode}-{guid_index}", words=words, labels=labels))
+#                     guid_index += 1
+#                     words = []
+#                     labels = []
+#             else:
+#                 splits = line.split(" ")
+#                 # splits = re.findall(r'\b\w+\s*\([^)]*\)|\b\w+', line)
+#                 words.append(splits[0])
+#                 if len(splits) > 1:
+#                     splits_replace = splits[-1].replace("\n", "")
+#                     if splits_replace == 'O':
+#                         labels.append(splits_replace)
+#                     else:
+#                         labels.append(splits_replace)
+#                         # labels.append(splits_replace + "-bio")  #changed by mls.
+#                 else:
+#                     # Examples could have no label for mode = "test"
+#                     labels.append("O")
+#         if words:
+#             # if mode == "test":
+#             examples.append(InputExample(guid=f"{mode}-{guid_index}", words=words, labels=labels))
+#             # else:
+#             #     examples.append(InputExample(guid=f"{mode}-{guid_index}", words=words, labels=labels))
+#     return examples
+
 
 def read_examples_from_file(data_dir, mode: Union[Split, str]) -> List[InputExample]:
     if isinstance(mode, Split):
         mode = mode.value
+    # InputExampleClass = InputExample if mode == "test" else InputExample
     file_path = os.path.join(data_dir, f"{mode}.txt")
     guid_index = 1
     examples = []
@@ -242,13 +299,17 @@ def read_examples_from_file(data_dir, mode: Union[Split, str]) -> List[InputExam
         labels = []
         for line in f:
             if line.startswith("-DOCSTART-") or line == "" or line == "\n":
-                if words:
+                if words:   #如果是空行，则说明一个句子结束了。
+                    # if mode == "test":
                     examples.append(InputExample(guid=f"{mode}-{guid_index}", words=words, labels=labels))
+                    # else:
+                    #     examples.append(InputExample(guid=f"{mode}-{guid_index}", words=words, labels=labels))
                     guid_index += 1
                     words = []
                     labels = []
             else:
                 splits = line.split(" ")
+                # splits = re.findall(r'\b\w+\s*\([^)]*\)|\b\w+', line)
                 words.append(splits[0])
                 if len(splits) > 1:
                     splits_replace = splits[-1].replace("\n", "")
@@ -261,7 +322,10 @@ def read_examples_from_file(data_dir, mode: Union[Split, str]) -> List[InputExam
                     # Examples could have no label for mode = "test"
                     labels.append("O")
         if words:
+            # if mode == "test":
             examples.append(InputExample(guid=f"{mode}-{guid_index}", words=words, labels=labels))
+            # else:
+            #     examples.append(InputExample(guid=f"{mode}-{guid_index}", words=words, labels=labels))
     return examples
 
 

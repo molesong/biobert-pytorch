@@ -1,6 +1,6 @@
 python run_re.py \
     --task_name "SST-2" \
-    --data_dir "~/bioinfo/P_subject/NLP/biobert/biobert-pytorch/datasets/RE/GAD/1" \
+    --data_dir "~/bioinfo/P_subject/NLP/biobert/datasets/for_train/datasets_from_download/RE/GAD/1" \
     --model_name_or_path "~/bioinfo/P_subject/NLP/biobert/biobertModelWarehouse/train_model_output/NER/4_combine_lipid_disease_ture_combine_2" \
     --max_seq_length 256 \
     --num_train_epochs 1 \

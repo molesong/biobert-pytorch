@@ -4,6 +4,8 @@ import torch
 from transformers import AutoConfig, AutoTokenizer, AutoModelForTokenClassification
 import pickle
 import pandas as pd
+from collections import defaultdict
+import numpy as np
 
 def load_model_and_tokenizer(model_dir,device):
     # 加载配置文件、分词器和模型
@@ -34,28 +36,33 @@ def predict(text, tokenizer, model, label_map, device):
             logits = outputs.logits
 
     # 获取预测结果
-    predictions = torch.argmax(logits, dim=2)
-    
-    predictions = predictions.cpu().detach().numpy()  #gpu中的torch.tensor,需要先把它放进cpu才可以转化
-    
+    predictions = logits[0].cpu().detach().numpy()
 
     # 将预测结果转换为标签
-    # example = "This is a tokenization example"
-    txt_label_index_list = []
-    #BatchEncoding.word_ids returns a list mapping words to tokens
-    for w_idx in set(inputs.word_ids()):
-        start, _ = inputs.word_to_tokens(w_idx)  #BatchEncoding.word_to_tokens tells us which and how many tokens are used for the specific word
-        txt_label_index_list.append(start)         # we add +1 because you wanted to start with 1 and not with 0
-    txt_predictions  = [predictions[0][index] for index in txt_label_index_list]
-    return text_split,txt_predictions
+    label_probability = defaultdict(float)
+    for idx, word_index in enumerate(inputs.word_ids()):
+        label_probability[word_index] += predictions[idx]
+    label_probability = np.array(list(label_probability.values()))
+    text_label_predictions = np.argmax(label_probability, axis=1)
+    
+    # predictions = torch.argmax(logits, dim=2)
+    # predictions = predictions.cpu().detach().numpy()  #gpu中的torch.tensor,需要先把它放进cpu才可以转化
+
+    # txt_label_index_list = []
+    # for w_idx in set(inputs.word_ids()):
+    #     start, _ = inputs.word_to_tokens(w_idx)  #BatchEncoding.word_to_tokens tells us which and how many tokens are used for the specific word
+
+    #     txt_label_index_list.append(start)         # we add +1 because you wanted to start with 1 and not with 0
+    # text_label_predictions  = [predictions[0][index] for index in txt_label_index_list]
+    return text_split,text_label_predictions
 
 
 path_ = '/home/data/t200404/bioinfo/P_subject/NLP/biobert/datasets/for_recognize/download_paper_and_use_Auto-CORPus_deal_paper/deal/extract_result/'
 with open(path_ + 'df_dict.pkl','rb') as f:
     df_dict = pickle.load(f)
 
-model_name = '4_combine_lipid_disease_ture_combine_3.2_data_from_MetaboliteNER_replace'
-model_dir = "/home/data/t200404/bioinfo/P_subject/NLP/biobert/biobertModelWarehouse/model_from_trained/NER/"  # 替换为你模型的保存路径
+model_name = '1_LipidCorpus'
+model_dir = "/home/data/t200404/bioinfo/P_subject/NLP/biobert/biobertModelWarehouse/model_from_trained/NER_add_words_change_split_way/"  # 替换为你模型的保存路径
 model_dir = model_dir + model_name + "/"
 config, tokenizer, model = load_model_and_tokenizer(model_dir,device = 'cuda')
 
@@ -79,5 +86,6 @@ for PMC_bioc_name in dict_keys_list:
         df_dict[PMC_bioc_name]['text_split'], df_dict[PMC_bioc_name]['txt_predictions'] = zip(*results)
         index_ += 1
         if index_ % save_batch == 0:
-            with open(path_+ f'df_dict_lipid_and_disease_{model_name}'+'_word2label'+'.pkl','wb') as f:
+            # with open(path_+ f'df_dict_lipid_and_disease_{model_name}'+'_word2label'+'.pkl','wb') as f:
+            with open(path_+ f'df_dict_lipid_and_disease___NER_add_words__{model_name}'+'_word2label'+'.pkl','wb') as f:
                 pickle.dump(df_dict, f)

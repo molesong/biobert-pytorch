@@ -167,6 +167,18 @@ def main():
         config=config,
         cache_dir=model_args.cache_dir,
     )
+
+    #add words in tokenizer and model
+    # if_add_words_in_tokenizer = True
+    # if if_add_words_in_tokenizer:
+    #     added_lipid_list_filename = '/home/data/t200404/bioinfo/P_subject/NLP/biobert/pytorch-biobert/named-entity-recognition/added_lipid_list.txt'
+    #     with open(added_lipid_list_filename, 'r') as f:
+    #         added_lipid_list = f.read().splitlines()
+    #     for lipid in added_lipid_list:
+    #         tokenizer.add_tokens(lipid)
+    #     model.resize_token_embeddings(len(tokenizer))
+    #     model.save_pretrained(model_args.model_name_or_path)
+    #     tokenizer.save_pretrained(model_args.model_name_or_path)
     '''
     model_to_save = AutoModel.from_pretrained(
         model_args.model_name_or_path,
@@ -174,8 +186,8 @@ def main():
         config=config,
         cache_dir=model_args.cache_dir,
     )
-    model_to_save.save_pretrained(training_args.output_dir)
-    tokenizer.save_pretrained(training_args.output_dir)
+    model_to_save.save_pretrained(model_args.model_name_or_path)
+    tokenizer.save_pretrained(model_args.model_name_or_path)
     import pdb; pdb.set_trace()
     '''
     print(1)
